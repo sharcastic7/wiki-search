@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
 ## Getting Started
 
 First, run the development server:
 
 ```bash
-npm run dev
+
+npm  run  dev
+
 # or
-yarn dev
+
+yarn  dev
+
 # or
-pnpm dev
+
+pnpm  dev
+
 # or
-bun dev
+
+bun  dev
+
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## How the App works
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+This application uses NextJS for the frontend and a serverless function in the backend to make requests to the Wikipedia APIs to retrieve search results and forward to the NextJS app.
 
-## Learn More
+## Basic Layout
 
-To learn more about Next.js, take a look at the following resources:
+The page is divided into 2 sections
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- To show a search related textbox and results
+- To show search history
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## How search works
 
-## Deploy on Vercel
+All search related code is in the useSearch hook. Here are some highlights about the feature
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- All the results are shown with an image, a title and a description if available.
+- The search string is debounced for 500 ms to make sure we don't make too many requests to the serverless function.
+- Every time a user searches for a term, it gets appended to the URL so that the URL can be shared.
+- The search results are infinitely loaded as the user goes towards the end of the list.
+- All the search terms in that particular session are also saved.
+- All search results are clickable and take you to their specific wiki page.
+- useCallbacks and useMemos are used as needed to avoid unnecessary re-renders.
+- A virtualized list is used to make sure that the page doesn't slow down because of too many items in the search results.
